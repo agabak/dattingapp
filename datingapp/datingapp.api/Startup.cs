@@ -52,7 +52,8 @@ namespace datingapp.api
             app.UseCors(policy => 
             {
                 policy.AllowAnyHeader().AllowAnyMethod()
-                      .WithOrigins("https://localhost:4200");
+                      .WithOrigins("https://localhost:4200",
+                                    "http://localhost:4200");
             });
 
             app.UseAuthorization();
