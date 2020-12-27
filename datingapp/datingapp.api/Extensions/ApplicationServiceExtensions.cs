@@ -14,7 +14,7 @@ namespace datingapp.api.Extensions
             IConfiguration config)
         {
             services.AddScoped<ITokenService, TokenService>();
-            services.AddDbContext<DataContext>(opts =>
+            services.AddDbContext<DataContext>(opts => 
             {
                 opts.UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
