@@ -1,11 +1,17 @@
 using datingapp.api.Data;
+using datingapp.api.Extensions;
+using datingapp.api.Interfaces;
+using datingapp.api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace datingapp.api
 {
@@ -21,18 +27,13 @@ namespace datingapp.api
         public void ConfigureServices(IServiceCollection services)
         {
 
+
+            services.AddApplicationServices(_config);
+            services.AddIdentityServices(_config);
+
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "datingapp.api", Version = "v1" });
-            });
-
-            services.AddDbContext<DataContext>(opts => 
-            {
-                opts.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
-            });
-
             services.AddCors();
+        
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +57,7 @@ namespace datingapp.api
                                     "http://localhost:4200");
             });
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
