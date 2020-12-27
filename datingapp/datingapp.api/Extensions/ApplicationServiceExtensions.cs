@@ -1,5 +1,7 @@
 ﻿using datingapp.api.Data;
+using datingapp.api.Data.Repositories;
 using datingapp.api.Interfaces;
+using datingapp.api.Interfaces.Repositories;
 using datingapp.api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +16,8 @@ namespace datingapp.api.Extensions
             IConfiguration config)
         {
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
             services.AddDbContext<DataContext>(opts => 
             {
                 opts.UseSqlServer(config.GetConnectionString("DefaultConnection"));
