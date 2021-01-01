@@ -37,7 +37,7 @@ namespace datingapp.api.Data.Repositories
                                    .SingleOrDefaultAsync<AppUser>
                                    (u => u.UserName == login.Username.ToLower());
 
-            if (user == null) return null;
+            if (user == null) throw new Exception("Invalid username");
 
             using var hmac = new HMACSHA512(user.PasswordSalt);
             var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(login.Password));

@@ -23,10 +23,9 @@ namespace datingapp.api.Controllers
             {
                  user = await _repo.RegisterAsync(register);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                 return BadRequest(ex.Message);
             }
             return user;
         }
@@ -37,12 +36,11 @@ namespace datingapp.api.Controllers
             UserDto user = null;
             try
             {
-                user = await _repo.LoginAsync(login);
+                 user = await _repo.LoginAsync(login);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return BadRequest(ex.Message);  
             }
 
             return user;
