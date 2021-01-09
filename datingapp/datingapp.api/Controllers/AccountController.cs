@@ -9,8 +9,8 @@ namespace datingapp.api.Controllers
 
     public class AccountController : BaseApiController
     {
-        private readonly IUserRepository _repo;
-        public AccountController(IUserRepository repo)
+        private readonly IAccountRepository _repo;
+        public AccountController(IAccountRepository repo)
         {
             _repo = repo;
         }

@@ -7,8 +7,6 @@ namespace datingapp.api.Interfaces.Repositories
 {
     public interface IUserRepository
     {
-        Task<UserDto> RegisterAsync(RegisterDto register);
-        Task<UserDto> LoginAsync(LoginDto login);
         void Update(AppUser user);
         Task<bool> SaveAllAsync();
         Task<IEnumerable<AppUser>> GetUsersAsync();
