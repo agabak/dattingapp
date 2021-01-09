@@ -1,4 +1,6 @@
-﻿using datingapp.api.DTOs;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using datingapp.api.DTOs;
 using datingapp.api.Entities;
 using datingapp.api.Interfaces;
 using datingapp.api.Interfaces.Repositories;
@@ -16,19 +18,27 @@ namespace datingapp.api.Data.Repositories
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
-        public UserRepository(DataContext context,ITokenService tokenService)
+        private readonly IMapper _mapper;
+
+        public UserRepository(
+          DataContext context,ITokenService tokenService, IMapper mapper)
         {
             _context = context;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                                 .Include(x => x.Photos)
+                                .ToListAsync();
         }
 
-        public async Task<AppUser> GetUserAsync(int id)
+        public async Task<AppUser> GetUserByIdAsync(int id)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await _context.Users
+                                 .Include(x => x.Photos)
+                                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<UserDto> LoginAsync(LoginDto login)
@@ -68,6 +78,38 @@ namespace datingapp.api.Data.Repositories
         private async Task<bool> IsUserExit(string username)
         {
             return await _context.Users.AnyAsync(u => u.UserName == username.ToLower());
+        }
+
+        public void Update(AppUser user)
+        {
+            _context.Entry(user).State = EntityState.Modified;
+        }
+
+        public async Task<bool> SaveAllAsync()
+        {
+            return await _context.SaveChangesAsync() > 0; 
+        }
+
+        public async Task<AppUser> GetUserByUserNameAsync(string username)
+        {
+            return await _context.Users
+                                 .Include(x => x.Photos)
+                                 .SingleOrDefaultAsync(u => u.UserName.ToLower() == username.ToLower());
+        }
+
+        public async Task<IEnumerable<MemberDto>> GetMembersAsync()
+        {
+            return await _context.Users
+                                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+                                .ToListAsync();
+        }
+
+        public async Task<MemberDto> GeMemberByUsernameAsync(string username)
+        {
+            return await _context.Users
+                                 .Where(u => u.UserName.ToLower() == username.ToLower())
+                                 .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+                                 .SingleOrDefaultAsync(); 
         }
     }
 }

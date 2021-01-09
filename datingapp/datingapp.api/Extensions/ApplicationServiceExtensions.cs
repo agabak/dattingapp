@@ -1,5 +1,7 @@
-﻿using datingapp.api.Data;
+﻿using AutoMapper;
+using datingapp.api.Data;
 using datingapp.api.Data.Repositories;
+using datingapp.api.Helpers;
 using datingapp.api.Interfaces;
 using datingapp.api.Interfaces.Repositories;
 using datingapp.api.Services;
@@ -17,7 +19,7 @@ namespace datingapp.api.Extensions
         {
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRepository>();
-
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddDbContext<DataContext>(opts => 
             {
                 opts.UseSqlServer(config.GetConnectionString("DefaultConnection"));

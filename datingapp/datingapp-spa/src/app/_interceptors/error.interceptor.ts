@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
-
 import {
   HttpRequest,
   HttpHandler,
