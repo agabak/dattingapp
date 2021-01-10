@@ -1,4 +1,4 @@
  export interface IPhoto {
-  Url: string;
-  IsMain: boolean;
+  url: string;
+  isMain: boolean;
 }
