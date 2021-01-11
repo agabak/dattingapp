@@ -2,14 +2,10 @@
 using AutoMapper.QueryableExtensions;
 using datingapp.api.DTOs;
 using datingapp.api.Entities;
-using datingapp.api.Interfaces;
 using datingapp.api.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace datingapp.api.Data.Repositories
@@ -17,21 +13,19 @@ namespace datingapp.api.Data.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
-        private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
 
         public UserRepository(
-          DataContext context,ITokenService tokenService, IMapper mapper)
+          DataContext context, IMapper mapper)
         {
             _context = context;
-            _tokenService = tokenService;
             _mapper = mapper;
         }
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
             return await _context.Users
                                  .Include(x => x.Photos)
-                                .ToListAsync();
+                                 .ToListAsync();
         }
 
         public async Task<AppUser> GetUserByIdAsync(int id)
@@ -61,8 +55,8 @@ namespace datingapp.api.Data.Repositories
         public async Task<IEnumerable<MemberDto>> GetMembersAsync()
         {
             return await _context.Users
-                                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-                                .ToListAsync();
+                                 .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+                                 .ToListAsync();
         }
 
         public async Task<MemberDto> GeMemberByUsernameAsync(string username)

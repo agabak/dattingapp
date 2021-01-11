@@ -22,8 +22,8 @@ namespace datingapp.api.Data.Repositories
         public async Task<UserDto> LoginAsync(LoginDto login)
         {
             var user = await _context.Users
-                                   .SingleOrDefaultAsync<AppUser>
-                                   (u => u.UserName == login.Username.ToLower());
+                                     .SingleOrDefaultAsync<AppUser>
+                                     (u => u.UserName == login.Username.ToLower());
 
             if (user == null) throw new Exception("Invalid username");
 
